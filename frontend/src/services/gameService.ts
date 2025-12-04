@@ -1,10 +1,16 @@
-import { db, storage } from '../firebase';
+import { db, storage, DEMO_MODE } from '../firebase';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage';
 import type { GameMeta, Level } from '@shared/types';
 import { MOCK_GAME_META, MOCK_LEVELS } from '../game/mockData';
 
 export const getUserGames = async (userId: string): Promise<GameMeta[]> => {
+    // DEMO MODE: Return mock data immediately
+    if (DEMO_MODE) {
+        console.log("DEMO_MODE: Returning mock games");
+        return [MOCK_GAME_META];
+    }
+
     try {
         const q = query(collection(db, 'games'), where('ownerUserId', '==', userId));
         const querySnapshot = await getDocs(q);
@@ -27,7 +33,8 @@ export const getUserGames = async (userId: string): Promise<GameMeta[]> => {
 };
 
 export const getGameMeta = async (gameId: string): Promise<GameMeta | null> => {
-    if (gameId === 'mock_game_1') return MOCK_GAME_META;
+    // DEMO MODE: Always return mock
+    if (DEMO_MODE || gameId === 'mock_game_1') return MOCK_GAME_META;
 
     try {
         // Try Firestore first for meta
@@ -49,7 +56,8 @@ export const getGameMeta = async (gameId: string): Promise<GameMeta | null> => {
 };
 
 export const getLevel = async (gameId: string, levelId: string): Promise<Level> => {
-    if (gameId === 'mock_game_1') {
+    // DEMO MODE: Always use mock levels
+    if (DEMO_MODE || gameId === 'mock_game_1') {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(MOCK_LEVELS[levelId as keyof typeof MOCK_LEVELS]);

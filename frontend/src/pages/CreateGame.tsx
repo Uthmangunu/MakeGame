@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useAuth } from '../services/auth';
+import { DEMO_MODE } from '../firebase';
 
 export const CreateGame: React.FC = () => {
     const [prompt, setPrompt] = useState('');
@@ -19,6 +20,19 @@ export const CreateGame: React.FC = () => {
 
         setIsGenerating(true);
         setError(null);
+
+        // DEMO MODE: Simulate generation and go to mock game
+        if (DEMO_MODE) {
+            console.log("DEMO_MODE: Simulating game generation...");
+            console.log("Prompt:", prompt);
+
+            // Fake delay to simulate AI generation
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Navigate to the mock game
+            navigate('/play/mock_game_1');
+            return;
+        }
 
         try {
             const functions = getFunctions();

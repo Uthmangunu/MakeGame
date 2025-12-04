@@ -1,8 +1,11 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
-import { getStorage, connectStorageEmulator } from 'firebase/storage';
-import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+import { getFunctions } from 'firebase/functions';
+
+// DEMO MODE: Set to true to skip Firebase and use mock data
+export const DEMO_MODE = true;
 
 // TODO: Replace with your actual Firebase project config
 // or use environment variables: VITE_FIREBASE_API_KEY, etc.
@@ -22,11 +25,6 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const functions = getFunctions(app);
 
-// Connect to emulators if running locally
-if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-    console.log("Using local Firebase Emulators");
-    connectAuthEmulator(auth, "http://127.0.0.1:9099");
-    connectFirestoreEmulator(db, '127.0.0.1', 8085);
-    connectStorageEmulator(storage, '127.0.0.1', 9199);
-    connectFunctionsEmulator(functions, '127.0.0.1', 5001);
-}
+// NOTE: Emulator connections disabled for DEMO_MODE
+// To use emulators, set DEMO_MODE to false and ensure Java 21+ is installed
+// Then run: firebase emulators:start
