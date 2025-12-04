@@ -95,37 +95,54 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ gameId }) => {
         };
     }, [loading, error, gameId]);
 
-    if (loading) return <div style={{ color: 'white' }}>Loading Game...</div>;
-    if (error) return <div style={{ color: 'red' }}>Error: {error}</div>;
+    if (loading) return <div className="loading-spinner" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}></div>;
+    if (error) return <div style={{ color: '#ff6b6b', textAlign: 'center', marginTop: '50px' }}>Error: {error}</div>;
 
     return (
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
             <div
                 id="game-container"
                 style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100vh',
-                    backgroundColor: '#1a1a1a'
+                    height: '100%',
+                    width: '100%'
                 }}
             />
+
+            {/* Controls Help */}
+            <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px',
+                color: 'rgba(255,255,255,0.5)',
+                pointerEvents: 'none',
+                fontFamily: 'monospace'
+            }}>
+                <p>WASD / Arrows to Move</p>
+                <p>SPACE to Interact</p>
+            </div>
+
+            {/* Retro Dialog Box */}
             {dialog && (
-                <div style={{
-                    position: 'absolute',
-                    bottom: '20px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    backgroundColor: 'white',
-                    padding: '20px',
-                    border: '2px solid black',
-                    borderRadius: '8px',
-                    width: '80%',
-                    maxWidth: '600px',
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-                }}>
-                    <p>{dialog}</p>
-                    <button onClick={() => setDialog(null)}>Close</button>
+                <div className="dialog-box">
+                    <p style={{ margin: 0 }}>{dialog}</p>
+                    <div style={{ textAlign: 'right', marginTop: '10px' }}>
+                        <button
+                            onClick={() => setDialog(null)}
+                            style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: '#666',
+                                cursor: 'pointer',
+                                textDecoration: 'underline',
+                                fontSize: '0.8em'
+                            }}
+                        >
+                            [CLOSE]
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
