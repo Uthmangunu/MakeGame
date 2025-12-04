@@ -1,7 +1,8 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getStorage, connectStorageEmulator } from 'firebase/storage';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 
 // TODO: Replace with your actual Firebase project config
 // or use environment variables: VITE_FIREBASE_API_KEY, etc.
@@ -19,3 +20,13 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const functions = getFunctions(app);
+
+// Connect to emulators if running locally
+if (location.hostname === 'localhost') {
+    console.log("Using local Firebase Emulators");
+    connectAuthEmulator(auth, "http://localhost:9099");
+    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectStorageEmulator(storage, 'localhost', 9199);
+    connectFunctionsEmulator(functions, 'localhost', 5001);
+}

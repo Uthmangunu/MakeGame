@@ -95,11 +95,11 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ gameId }) => {
         };
     }, [loading, error, gameId]);
 
-    if (loading) return <div className="loading-spinner" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}></div>;
-    if (error) return <div style={{ color: '#ff6b6b', textAlign: 'center', marginTop: '50px' }}>Error: {error}</div>;
+    if (loading) return <div className="pixel-spinner" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}></div>;
+    if (error) return <div style={{ color: 'red', textAlign: 'center', marginTop: '50px', fontFamily: 'var(--font-display)' }}>ERROR: {error}</div>;
 
     return (
-        <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
+        <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: '#121212' }}>
             <div
                 id="game-container"
                 style={{
@@ -116,29 +116,32 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({ gameId }) => {
                 position: 'absolute',
                 top: '20px',
                 left: '20px',
-                color: 'rgba(255,255,255,0.5)',
+                color: 'rgba(255,255,255,0.7)',
                 pointerEvents: 'none',
-                fontFamily: 'monospace'
+                fontFamily: 'var(--font-display)',
+                fontSize: '0.7rem',
+                textShadow: '2px 2px 0px #000'
             }}>
-                <p>WASD / Arrows to Move</p>
-                <p>SPACE to Interact</p>
+                <p>WASD / ARROWS = MOVE</p>
+                <p>SPACE = INTERACT</p>
             </div>
 
             {/* Retro Dialog Box */}
             {dialog && (
-                <div className="dialog-box">
-                    <p style={{ margin: 0 }}>{dialog}</p>
-                    <div style={{ textAlign: 'right', marginTop: '10px' }}>
+                <div className="neo-dialog" style={{
+                    position: 'absolute',
+                    bottom: '40px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '80%',
+                    maxWidth: '600px',
+                }}>
+                    <p style={{ margin: 0, marginBottom: '10px' }}>{dialog}</p>
+                    <div style={{ textAlign: 'right' }}>
                         <button
+                            className="neo-btn"
                             onClick={() => setDialog(null)}
-                            style={{
-                                background: 'transparent',
-                                border: 'none',
-                                color: '#666',
-                                cursor: 'pointer',
-                                textDecoration: 'underline',
-                                fontSize: '0.8em'
-                            }}
+                            style={{ padding: '8px 16px', fontSize: '0.6rem' }}
                         >
                             [CLOSE]
                         </button>

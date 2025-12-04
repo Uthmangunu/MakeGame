@@ -4,6 +4,8 @@ exports.generateGameFromStory = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const openai_1 = require("openai");
+const dotenv = require("dotenv");
+dotenv.config();
 // import Ajv from 'ajv';
 // Initialize Firebase Admin
 if (!admin.apps.length) {

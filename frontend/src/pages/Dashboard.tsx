@@ -20,60 +20,59 @@ export const Dashboard: React.FC = () => {
         }
     }, [user]);
 
-    if (loading) return <div className="loading-spinner"></div>;
+    if (loading) return <div className="pixel-spinner" style={{ margin: '50px auto' }}></div>;
 
     return (
-        <div style={{ padding: '40px', maxWidth: '1000px', margin: '0 auto' }}>
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '60px' }}>
+        <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '60px', borderBottom: '3px solid black', paddingBottom: '20px' }}>
                 <div>
-                    <h1 style={{ margin: 0, background: 'linear-gradient(to right, #646cff, #42b883)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                        StoryMode Engine
+                    <h1 style={{ margin: 0, color: 'var(--accent-primary)', textShadow: '3px 3px 0px #000' }}>
+                        STORYMODE<br />ENGINE
                     </h1>
-                    <p style={{ marginTop: '10px', color: '#888' }}>Turn your stories into playable games.</p>
+                    <p style={{ marginTop: '10px', fontFamily: 'var(--font-body)', fontWeight: 'bold' }}>// TURN_STORIES_INTO_GAMES</p>
                 </div>
                 <div>
                     {user ? (
                         <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                            <span style={{ fontWeight: 'bold' }}>{user.displayName}</span>
-                            <button onClick={signOut}>Sign Out</button>
+                            <span style={{ fontFamily: 'var(--font-display)', fontSize: '0.8rem' }}>USER: {user.displayName}</span>
+                            <button className="neo-btn" onClick={signOut}>LOGOUT</button>
                         </div>
                     ) : (
-                        <button className="btn-primary" onClick={signInWithGoogle}>Sign In with Google</button>
+                        <button className="neo-btn neo-btn-primary" onClick={signInWithGoogle}>LOGIN_WITH_GOOGLE</button>
                     )}
                 </div>
             </header>
 
             <section>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-                    <h2 style={{ fontSize: '1.8em' }}>Your Games</h2>
-                    <button className="btn-primary" onClick={() => navigate('/create')}>
-                        + Create New Game
+                    <h2>YOUR_GAMES_DB</h2>
+                    <button className="neo-btn neo-btn-primary" onClick={() => navigate('/create')}>
+                        + NEW_GAME
                     </button>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '30px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '30px' }}>
                     {games.map(game => (
-                        <div key={game.gameId} className="card">
-                            <h3 style={{ marginTop: 0 }}>{game.title}</h3>
-                            <p style={{ color: '#aaa', fontSize: '0.9em', lineHeight: '1.6', minHeight: '60px' }}>
+                        <div key={game.gameId} className="neo-card">
+                            <h3 style={{ marginTop: 0, fontSize: '1rem' }}>{game.title}</h3>
+                            <p style={{ color: '#555', fontSize: '0.9em', lineHeight: '1.6', minHeight: '60px', borderTop: '2px solid #eee', paddingTop: '10px' }}>
                                 {game.summary.length > 100 ? game.summary.substring(0, 100) + '...' : game.summary}
                             </p>
-                            <div style={{ marginTop: '20px' }}>
+                            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
                                 <button
-                                    className="btn-success"
+                                    className="neo-btn neo-btn-success"
                                     onClick={() => navigate(`/play/${game.gameId}`)}
-                                    style={{ width: '100%' }}
                                 >
-                                    Play
+                                    PLAY &gt;
                                 </button>
                             </div>
                         </div>
                     ))}
                     {games.length === 0 && (
-                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', border: '2px dashed #333', borderRadius: '8px' }}>
-                            <p style={{ color: '#666' }}>No games found.</p>
-                            <button className="btn-primary" onClick={() => navigate('/create')} style={{ marginTop: '10px' }}>
-                                Create your first game
+                        <div className="neo-card" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px', borderStyle: 'dashed' }}>
+                            <p style={{ color: '#666', marginBottom: '20px' }}>NO_GAMES_FOUND_IN_DATABASE</p>
+                            <button className="neo-btn neo-btn-primary" onClick={() => navigate('/create')}>
+                                INITIALIZE_FIRST_GAME
                             </button>
                         </div>
                     )}

@@ -39,55 +39,56 @@ export const CreateGame: React.FC = () => {
     };
 
     return (
-        <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto', color: 'white' }}>
-            <button onClick={() => navigate('/')} style={{ marginBottom: '20px', background: 'transparent', paddingLeft: 0 }}>
-                &larr; Back to Dashboard
+        <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}>
+            <button onClick={() => navigate('/')} className="neo-btn" style={{ marginBottom: '30px' }}>
+                &lt; BACK_TO_DASHBOARD
             </button>
 
-            <h1 style={{ fontSize: '2.5em', marginBottom: '10px' }}>Create New Game</h1>
-            <p style={{ color: '#aaa', marginBottom: '30px' }}>
-                Describe your game story below. Be creative! Mention the setting, the goal, and any obstacles.
+            <h1 style={{ marginBottom: '10px', color: 'var(--accent-primary)', textShadow: '3px 3px 0px #000' }}>CREATE_NEW_GAME</h1>
+            <p style={{ marginBottom: '30px', fontFamily: 'var(--font-body)', fontSize: '1.1rem' }}>
+                Input your story parameters. The system will generate the game world.
             </p>
 
-            <div className="card" style={{ padding: '30px' }}>
+            <div className="neo-card" style={{ padding: '40px' }}>
+                <label style={{ display: 'block', fontFamily: 'var(--font-display)', marginBottom: '10px', fontSize: '0.8rem' }}>STORY_PROMPT:</label>
                 <textarea
+                    className="neo-input"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="E.g., A brave knight wakes up in a dark dungeon. They must find the golden key to escape, but the path is guarded by walls and locked doors..."
+                    placeholder="E.g., A cyberpunk hacker needs to infiltrate a corporate server room..."
                     style={{
-                        width: '100%',
                         height: '200px',
-                        padding: '15px',
-                        borderRadius: '8px',
-                        backgroundColor: '#1a1a1a',
-                        color: 'white',
-                        border: '1px solid #444',
-                        fontSize: '1.1em',
-                        fontFamily: 'inherit',
-                        resize: 'vertical'
+                        resize: 'vertical',
+                        marginBottom: '20px'
                     }}
                     disabled={isGenerating}
                 />
 
-                {error && <p style={{ color: '#ff6b6b', marginTop: '15px' }}>{error}</p>}
+                {error && (
+                    <div style={{ border: '2px solid red', padding: '10px', color: 'red', marginBottom: '20px', fontFamily: 'var(--font-display)', fontSize: '0.7rem' }}>
+                        ERROR: {error}
+                    </div>
+                )}
 
-                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '15px' }}>
-                    {isGenerating && <span style={{ color: '#646cff' }}>Generating your world... (this may take a minute)</span>}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px' }}>
+                    {isGenerating && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div className="pixel-spinner"></div>
+                            <span style={{ fontFamily: 'var(--font-display)', fontSize: '0.7rem', color: 'var(--accent-primary)' }}>GENERATING_WORLD...</span>
+                        </div>
+                    )}
                     <button
-                        className="btn-primary"
+                        className="neo-btn neo-btn-primary"
                         onClick={handleGenerate}
                         disabled={isGenerating || !prompt.trim()}
                         style={{
-                            padding: '12px 30px',
-                            fontSize: '1.1em',
                             opacity: isGenerating || !prompt.trim() ? 0.5 : 1,
                             cursor: isGenerating || !prompt.trim() ? 'not-allowed' : 'pointer'
                         }}
                     >
-                        {isGenerating ? 'Generating...' : 'Generate Game'}
+                        {isGenerating ? 'PROCESSING...' : 'GENERATE_GAME &gt;'}
                     </button>
                 </div>
-                {isGenerating && <div className="loading-spinner"></div>}
             </div>
         </div>
     );

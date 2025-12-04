@@ -1,115 +1,164 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Colors */
+  --bg-color: #F0F0F0;
+  --surface-color: #FFFFFF;
+  --text-color: #000000;
+  --border-color: #000000;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #1a1a1a;
+  /* Accents */
+  --accent-primary: #FF5C00;
+  /* Vibrant Orange */
+  --accent-secondary: #00D1FF;
+  /* Cyan */
+  --accent-success: #00E054;
+  /* Green */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Fonts */
+  --font-display: 'Press Start 2P', cursive;
+  --font-body: 'Space Grotesk', sans-serif;
+
+  /* Borders & Shadows */
+  --border-width: 3px;
+  --shadow-offset: 6px;
+  --shadow-hard: var(--shadow-offset) var(--shadow-offset) 0px 0px var(--border-color);
+  --shadow-hover: 2px 2px 0px 0px var(--border-color);
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  font-family: var(--font-body);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
 }
 
-.app {
-  width: 100%;
-  min-height: 100vh;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 1.4;
+  margin-bottom: 1rem;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 2rem;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+/* --- Components --- */
+
+/* The "Hard" Card */
+.neo-card {
+  background-color: var(--surface-color);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow-hard);
+  padding: 24px;
+  transition: all 0.1s ease-in-out;
+  position: relative;
+}
+
+.neo-card:hover {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* The "Pixel" Button */
+.neo-btn {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  padding: 16px 24px;
+  background-color: var(--surface-color);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 4px 4px 0px 0px var(--border-color);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.1s;
+  text-transform: uppercase;
+  color: var(--text-color);
 }
-button:hover {
-  border-color: #646cff;
+
+.neo-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px var(--border-color);
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+.neo-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.neo-btn-primary {
+  background-color: var(--accent-primary);
+  color: white;
+  text-shadow: 2px 2px 0px #000;
+}
+
+.neo-btn-success {
+  background-color: var(--accent-success);
+}
+
+/* Inputs */
+.neo-input {
+  width: 100%;
+  padding: 16px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  border: var(--border-width) solid var(--border-color);
+  background: var(--surface-color);
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.neo-input:focus {
+  box-shadow: 4px 4px 0px 0px var(--accent-secondary);
 }
 
 /* Utilities */
-.btn-primary {
-  background-color: #646cff;
-  color: white;
-}
-.btn-primary:hover {
-  background-color: #535bf2;
-  border-color: #535bf2;
+.text-accent {
+  color: var(--accent-primary);
 }
 
-.btn-success {
-  background-color: #42b883;
+.bg-dark {
+  background-color: #1a1a1a;
   color: white;
 }
-.btn-success:hover {
-  background-color: #33a06f;
-  border-color: #33a06f;
+
+/* Loading Spinner */
+.pixel-spinner {
+  width: 40px;
+  height: 40px;
+  background-color: var(--accent-primary);
+  animation: pixel-spin 1s infinite steps(4);
+  box-shadow: 4px 4px 0px 0px var(--border-color);
 }
 
-.card {
-  background-color: #242424;
-  border-radius: 8px;
+@keyframes pixel-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dialog Box */
+.neo-dialog {
+  background-color: var(--surface-color);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow-hard);
   padding: 20px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid #333;
-}
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  border-color: #646cff;
-}
-
-.dialog-box {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #fff;
-  color: #000;
-  padding: 15px 20px;
-  border: 4px solid #333;
-  border-radius: 4px;
-  width: 80%;
-  max-width: 600px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-  font-family: 'Courier New', Courier, monospace;
-  font-weight: bold;
-}
-
-.loading-spinner {
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border-left-color: #646cff;
-  animation: spin 1s ease-in-out infinite;
-  margin: 20px auto;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  line-height: 1.6;
 }
