@@ -1,0 +1,19 @@
+# Compiled JavaScript files
+lib/
+lib-esm/
+
+# TypeScript v1 declaration files
+typings/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Firebase
+firebase-debug.log
+firebase-debug.*.log
+
+# Environment Variables
+.env
+.runtimeconfig.json
