@@ -1,11 +1,11 @@
 import Phaser from 'phaser';
 import type { Level } from '@shared/types';
-import { MOCK_LEVEL } from './mockData';
+import { gameState } from './gameState';
 
 export class GameScene extends Phaser.Scene {
     private player!: Phaser.GameObjects.Rectangle;
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-    private currentLevel: Level = MOCK_LEVEL;
+    private currentLevel!: Level;
     private tileSize = 32;
     private playerGridPos = { x: 1, y: 1 };
     private isMoving = false;
@@ -14,6 +14,15 @@ export class GameScene extends Phaser.Scene {
 
     constructor() {
         super('GameScene');
+    }
+
+    init() {
+        // Get current level from state
+        const level = gameState.getCurrentLevel();
+        if (!level) {
+            throw new Error("No level loaded in GameState");
+        }
+        this.currentLevel = level;
     }
 
     preload() {
@@ -68,6 +77,7 @@ export class GameScene extends Phaser.Scene {
                 let color = 0xffffff; // Default floor
                 if (tileDef?.type === 'wall') color = 0x000000;
                 else if (tileDef?.type === 'floor') color = 0x888888;
+                else if (tileDef?.type === 'door') color = 0x964B00; // Brown door
 
                 // Draw tile
                 this.add.rectangle(
@@ -82,6 +92,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     private createPlayer() {
+        // Check if we have a specific spawn point from a previous level transition
+        // For now, let's just use default or 'start'
+        // TODO: Pass spawnPointId via init data or GameState
+
         const startPos = this.currentLevel.spawnPoints[this.currentLevel.defaultSpawnPointId];
         this.playerGridPos = { ...startPos };
 
@@ -125,9 +139,22 @@ export class GameScene extends Phaser.Scene {
             y: newY * this.tileSize + this.tileSize / 2,
             duration: 100,
             onComplete: () => {
-                // Trigger on_step events here later
+                this.checkTileEvents(newX, newY);
             }
         });
+    }
+
+    private checkTileEvents(x: number, y: number) {
+        const tileCode = this.currentLevel.map[y][x];
+        const tileDef = this.currentLevel.tileset[tileCode];
+
+        if (tileDef?.type === 'door' && tileDef.doorTargetLevelId) {
+            console.log(`Door hit! Going to ${tileDef.doorTargetLevelId}`);
+            this.game.events.emit('switchLevel', {
+                targetLevelId: tileDef.doorTargetLevelId,
+                targetSpawnPointId: tileDef.doorTargetSpawnPointId
+            });
+        }
     }
 
     private handleInteraction() {
