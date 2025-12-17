@@ -1,10 +1,11 @@
-import type { Level, GameMeta } from '@shared/types';
+import type { Level, GameMeta, Inventory } from '@shared/types';
 
 export interface GameState {
     gameId: string;
     currentLevelId: string;
     flags: { [key: string]: boolean };
-    // We might want to persist player position if we save mid-level, 
+    inventory: Inventory;
+    // We might want to persist player position if we save mid-level,
     // but for now level transitions usually define spawn points.
 }
 
@@ -16,7 +17,8 @@ class GameStateManager {
         this.state = {
             gameId: '',
             currentLevelId: '',
-            flags: {}
+            flags: {},
+            inventory: { items: {} }
         };
     }
 
@@ -25,7 +27,8 @@ class GameStateManager {
         this.state = {
             gameId: meta.gameId,
             currentLevelId: meta.startLevelId,
-            flags: { ...(meta.initialFlags || {}) }
+            flags: { ...(meta.initialFlags || {}) },
+            inventory: { items: {} }
         };
     }
 
@@ -59,8 +62,70 @@ class GameStateManager {
         this.state = {
             gameId: '',
             currentLevelId: '',
-            flags: {}
+            flags: {},
+            inventory: { items: {} }
         };
+    }
+
+    public addItem(itemId: string, quantity: number = 1) {
+        if (this.state.inventory.items[itemId]) {
+            this.state.inventory.items[itemId].quantity += quantity;
+        } else {
+            this.state.inventory.items[itemId] = { quantity };
+        }
+        console.log(`Item added: ${itemId} x${quantity}`);
+    }
+
+    public hasItem(itemId: string): boolean {
+        return !!this.state.inventory.items[itemId] && this.state.inventory.items[itemId].quantity > 0;
+    }
+
+    public getInventory(): Inventory {
+        return this.state.inventory;
+    }
+
+    public saveToLocalStorage() {
+        const saveData = {
+            gameId: this.state.gameId,
+            currentLevelId: this.state.currentLevelId,
+            flags: this.state.flags,
+            inventory: this.state.inventory,
+            timestamp: new Date().toISOString()
+        };
+
+        try {
+            localStorage.setItem(`game_save_${this.state.gameId}`, JSON.stringify(saveData));
+            console.log('Game saved to localStorage');
+        } catch (error) {
+            console.error('Failed to save game:', error);
+        }
+    }
+
+    public loadFromLocalStorage(gameId: string): boolean {
+        try {
+            const saved = localStorage.getItem(`game_save_${gameId}`);
+            if (saved) {
+                const data = JSON.parse(saved);
+                this.state.currentLevelId = data.currentLevelId;
+                this.state.flags = data.flags || {};
+                this.state.inventory = data.inventory || { items: {} };
+                console.log('Game loaded from localStorage');
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Failed to load game:', error);
+            return false;
+        }
+    }
+
+    public clearSave(gameId: string) {
+        try {
+            localStorage.removeItem(`game_save_${gameId}`);
+            console.log('Save data cleared');
+        } catch (error) {
+            console.error('Failed to clear save:', error);
+        }
     }
 }
 

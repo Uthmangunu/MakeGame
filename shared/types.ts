@@ -39,6 +39,11 @@ export interface Level {
     [key: string]: Interaction; // "2", "book_3", etc.
   };
 
+  // Item definitions for this level
+  items?: {
+    [itemId: string]: ItemDefinition;
+  };
+
   // Optional narrative blurb for UI (not required for engine)
   description?: string;
 }
@@ -66,6 +71,44 @@ export interface Interaction {
   giveItemFlag?: string;        // Equivalent to setFlag, but semantically item
 }
 
+export interface ItemDefinition {
+  itemId: string;
+  name: string;
+  description: string;
+  type: "key" | "quest" | "consumable";
+}
+
+export interface Inventory {
+  items: {
+    [itemId: string]: {
+      quantity: number;
+      definition?: ItemDefinition;
+    };
+  };
+}
+
+// Character visual data for sprite generation
+export interface Character {
+  id: string;                    // "hero_main", "villain_main"
+  name: string;                  // "Elara"
+  role: "hero" | "villain" | "npc";
+  visualDescription: string;     // Detailed prompt for pixel art generation
+  spriteUrl?: string;            // URL to generated sprite (populated after Stage 2)
+}
+
+// Asset URLs from AI generation
+export interface GameAssets {
+  heroUrl?: string;              // Generated hero sprite
+  villainUrl?: string;           // Generated villain sprite
+  npcSprites?: {
+    [npcId: string]: string;     // NPC ID -> sprite URL
+  };
+  itemSprites?: {
+    [itemId: string]: string;    // Item ID -> sprite URL
+  };
+  tilesetUrl?: string;           // Generated tileset (floor/wall textures)
+}
+
 export interface GameMeta {
   gameId: string;
   ownerUserId: string;
@@ -83,4 +126,13 @@ export interface GameMeta {
   initialFlags?: {
     [flagName: string]: boolean;
   };
+
+  // Stage 1: Character definitions (narrative)
+  characters?: Character[];
+
+  // Stage 2: Generated assets
+  assets?: GameAssets;
+
+  // Stage 1: Setting visuals for background/tile generation
+  settingVisuals?: string;    // "Dark dungeon with stone walls and torchlight"
 }

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-
 import { GameCanvas } from './components/GameCanvas';
 import { Dashboard } from './pages/Dashboard';
 import { CreateGame } from './pages/CreateGame';
+import { DebugGame } from './pages/DebugGame';
 
 const PlayGame = () => {
   const { gameId } = useParams<{ gameId: string }>();
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/play/:gameId" element={<PlayGame />} />
           <Route path="/create" element={<CreateGame />} />
+          <Route path="/debug" element={<DebugGame />} />
         </Routes>
       </div>
     </Router>
